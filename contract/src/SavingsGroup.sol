@@ -30,6 +30,7 @@ contract SavingsGroup is VRFConsumerBaseV2 {
     uint256 public protocolFeeBps = 100;
     address[] public members;
     uint256 public totalDepositGoal;
+    uint totalProfitShared;
     mapping(address => uint256) public balances;
 
     address[] public winners;
@@ -39,6 +40,7 @@ contract SavingsGroup is VRFConsumerBaseV2 {
     mapping(address => bool) public isEligible;
 
     bool public yieldDistributed;
+
 
     /*//////////////////////////////////////////////////////////////
                             CHAINLINK VRF
@@ -195,7 +197,7 @@ contract SavingsGroup is VRFConsumerBaseV2 {
             uint256 protocolFeeAmount = pendingProfit * protocolFeeBps / 10_000; // 1% protocol fee
             token.transfer(PROTOCOL, protocolFeeAmount);
             pendingProfit = totalReturned - principal - protocolFeeAmount;
-
+            totalProfitShared = pendingProfit;
             uint256 requestID = coordinator.requestRandomWords(
                 keyHash, subscriptionId, CONFIRMATIONS, callbackGasLimit, uint32(winnersCount)
             );
