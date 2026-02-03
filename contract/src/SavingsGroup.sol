@@ -30,7 +30,7 @@ contract SavingsGroup is VRFConsumerBaseV2 {
     uint256 public protocolFeeBps = 100;
     address[] public members;
     uint256 public totalDepositGoal;
-    uint totalProfitShared;
+    uint256 totalProfitShared;
     mapping(address => uint256) public balances;
 
     address[] public winners;
@@ -40,7 +40,6 @@ contract SavingsGroup is VRFConsumerBaseV2 {
     mapping(address => bool) public isEligible;
 
     bool public yieldDistributed;
-
 
     /*//////////////////////////////////////////////////////////////
                             CHAINLINK VRF
@@ -170,6 +169,55 @@ contract SavingsGroup is VRFConsumerBaseV2 {
         token.transfer(msg.sender, amount);
 
         emit Withdrawn(msg.sender, amount);
+    }
+
+    function selectWinnerAndDistributeYield(uint256[] calldata randomNumbers) external {
+        require(msg.sender == PROTOCOL, "Not authorized");
+        require(block.timestamp >= endTime, "Too early");
+        require(!yieldDistributed, "Already distributed");
+        require(members.length >= winnersCount, "Not enough members");
+        require(eligibleMembers.length >= winnersCount, "Not enough eligible users");
+        require(randomNumbers.length >= winnersCount, "Not enough random numbers");
+        // delegate call withdrawAll here withdrawAll(uint totalAmount)
+        (bool success, bytes memory data) =
+            address(yieldAdapter).delegatecall(abi.encodeWithSignature("withdrawAll(uint256)", totalDeposits()));
+        require(success, "Withdraw failed");
+        uint256 totalReturned = abi.decode(data, (uint256));
+        uint256 principal = totalDeposits();
+        if (totalReturned == principal) {
+            yieldDistributed = true;
+            pendingProfit = 0;
+            return;
+        } else {
+            require(totalReturned > principal, "No profit");
+            // calculate protocol fee from pendingProfit
+            uint256 protocolFeeAmount = pendingProfit * protocolFeeBps / 10_000; // 1% protocol fee
+            token.transfer(PROTOCOL, protocolFeeAmount);
+            pendingProfit = totalReturned - principal - protocolFeeAmount;
+            totalProfitShared = pendingProfit;
+            uint256 rewardPerWinner = pendingProfit / winnersCount;
+            uint256 eligibleLen = eligibleMembers.length;
+
+            for (uint256 i = 0; i < randomNumbers.length; i++) {
+                uint256 idx = randomNumbers[i] % eligibleLen;
+                address winner = eligibleMembers[idx];
+
+                if (isWinner[winner]) {
+                    i--;
+                    continue;
+                }
+
+                isWinner[winner] = true;
+                winners.push(winner);
+                balances[winner] += rewardPerWinner;
+                pendingProfit -= rewardPerWinner;
+            }
+
+            yieldDistributed = true;
+            emit YieldDistributed(winners, rewardPerWinner);
+        }
+
+        emit YieldRequested(pendingProfit);
     }
 
     /*//////////////////////////////////////////////////////////////
