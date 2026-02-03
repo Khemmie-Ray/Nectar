@@ -16,7 +16,7 @@ export default function Hero() {
 
   return (
     <section className="w-full px-4 sm:px-6 md:px-8 lg:px-16 mt-2 sm:mt-4">
-      <div className="max-w-[1400px] mx-auto">
+      <div>
         <div className="bg-[#252B36] rounded-2xl sm:rounded-3xl border-2 border-[#4A9FD8]/50 px-6 py-12 sm:px-8 sm:py-14 md:px-12 md:py-16 lg:px-20 lg:py-20 relative overflow-hidden">
           {/* Animated Stars */}
           {stars.map((star, index) => (

@@ -1,5 +1,11 @@
 import type { Metadata } from 'next';
+import { Manrope } from "next/font/google";
 import './globals.css';
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: 'Nectar - Save Together, Earn Yield Safely',
@@ -14,15 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="font-manrope antialiased">{children}</body>
+      <body className={`${manrope.variable}  antialiased`}>{children}</body>
     </html>
   );
 }
