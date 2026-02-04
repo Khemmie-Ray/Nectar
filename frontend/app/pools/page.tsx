@@ -3,8 +3,10 @@
 import Image from 'next/image';
 import { Search, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Pools() {
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [flippedCards, setFlippedCards] = useState<{ [key: number]: boolean }>({});
@@ -77,11 +79,19 @@ export default function Pools() {
     },
   ];
 
-  const toggleFlip = (id: number) => {
+  const toggleFlip = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
     setFlippedCards(prev => ({
       ...prev,
       [id]: !prev[id]
     }));
+  };
+
+  const handleCardClick = (poolId: number) => {
+    // Only navigate if card is not flipped
+    if (!flippedCards[poolId]) {
+      router.push(`/pools/${poolId}`);
+    }
   };
 
   return (
@@ -188,11 +198,11 @@ export default function Pools() {
             <div
               key={pool.id}
               className="w-full h-[500px] sm:h-[520px] perspective-1000"
-              onClick={() => toggleFlip(pool.id)}
             >
               <div
                 className={`relative w-full h-full transition-transform duration-700 transform-style-3d cursor-pointer ${flippedCards[pool.id] ? 'rotate-y-180' : ''
                   }`}
+                onClick={() => handleCardClick(pool.id)}
               >
                 {/* Front Side */}
                 <div className="absolute inset-0 backface-hidden bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
@@ -220,13 +230,21 @@ export default function Pools() {
                           {pool.target.toLocaleString()}
                         </span>
                       </div>
-                      <Image
-                        src='/triangleImage.png'
-                        alt="Triangle"
-                        width={12}
-                        height={12}
-                        className="w-2.5 h-2.5 sm:w-3 sm:h-3"
-                      />
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={(e) => toggleFlip(e, pool.id)}
+                          className="text-[10px] sm:text-xs text-blue-600 hover:text-blue-800 underline"
+                        >
+                          Details
+                        </button>
+                        <Image
+                          src='/triangleImage.png'
+                          alt="Triangle"
+                          width={12}
+                          height={12}
+                          className="w-2.5 h-2.5 sm:w-3 sm:h-3"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -273,6 +291,17 @@ export default function Pools() {
                       </div>
                     </div>
                   </div>
+
+                  {/* View Full Details Button on Back */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/pools/${pool.id}`);
+                    }}
+                    className="mt-4 px-4 py-2 bg-[#FFC000] text-[#252B36] rounded-lg text-xs font-bold hover:bg-[#FFD14D] transition-colors"
+                  >
+                    View Full Details
+                  </button>
                 </div>
               </div>
             </div>
