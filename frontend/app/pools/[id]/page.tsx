@@ -274,10 +274,10 @@ export default function PoolDetails() {
                             <thead className="bg-white border-b border-gray-200">
                                 <tr>
                                     <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#252B36]">
-                                        User &apos;s Address
+                                        User&apos;s Address
                                     </th>
                                     <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#252B36]">
-                                        Fund &apos;s Target($)
+                                        Fund&apos;s Target($)
                                     </th>
                                     <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#252B36]">
                                         Amount Paid
