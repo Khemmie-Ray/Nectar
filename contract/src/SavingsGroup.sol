@@ -134,8 +134,9 @@ contract SavingsGroup is VRFConsumerBaseV2 {
     /*//////////////////////////////////////////////////////////////
                               USER ACTIONS
     //////////////////////////////////////////////////////////////*/
-
+    // @note todo native token compatible
     function deposit(uint256 amount) external {
+        // if (msg.value > 0) require(msg.value == amount, "native amoount mismatch");
         require(block.timestamp < endTime, "Savings ended");
         require(amount > 0, "Zero amount");
 

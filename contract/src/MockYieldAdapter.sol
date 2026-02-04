@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract MockYieldAdapter is IYieldAdapter {
 
-    IERC20 public token;
+    IERC20 public immutable token;
     uint256 public totalDeposited;
 
     constructor(address _token) {

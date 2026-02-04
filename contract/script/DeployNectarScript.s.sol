@@ -11,7 +11,7 @@ contract DeployNectarScript is Script {
     address owner = 0x748DE9BFBDD651bD461a1cf95F9D8c6F7ab93B06;
     address protocolFeeWallet = 0x748DE9BFBDD651bD461a1cf95F9D8c6F7ab93B06;
 
-    function run() public {
+    function run() public returns (address) {
         // address deployerPrivateKey = 0x748DE9BFBDD651bD461a1cf95F9D8c6F7ab93B06;
         vm.startBroadcast(owner);
 
@@ -28,6 +28,7 @@ contract DeployNectarScript is Script {
         SavingsFactory savingsFactory = new SavingsFactory(subscriptionId, protocolFeeWallet, owner);
         console.log("SavingsFactory deployed at:", address(savingsFactory));
         vm.stopBroadcast();
+        return address(savingsFactory);
     }
 
 }
