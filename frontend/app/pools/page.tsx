@@ -4,10 +4,10 @@ import Image from 'next/image';
 import { Search, Plus } from 'lucide-react';
 import { useState } from 'react';
 
-
 export default function Pools() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [flippedCards, setFlippedCards] = useState<{ [key: number]: boolean }>({});
 
   const pools = [
     {
@@ -16,6 +16,12 @@ export default function Pools() {
       title: 'OASIS',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       target: 20000,
+      winnerCount: 3,
+      currentWinners: 3,
+      totalWinners: 20,
+      members: 15,
+      totalMembers: 20,
+      balance: 5000,
     },
     {
       id: 2,
@@ -23,6 +29,12 @@ export default function Pools() {
       title: 'OASIS',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       target: 20000,
+      winnerCount: 3,
+      currentWinners: 3,
+      totalWinners: 20,
+      members: 15,
+      totalMembers: 20,
+      balance: 5000,
     },
     {
       id: 3,
@@ -30,6 +42,12 @@ export default function Pools() {
       title: 'OASIS',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       target: 20000,
+      winnerCount: 3,
+      currentWinners: 3,
+      totalWinners: 20,
+      members: 15,
+      totalMembers: 20,
+      balance: 5000,
     },
     {
       id: 4,
@@ -37,6 +55,12 @@ export default function Pools() {
       title: 'OASIS',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       target: 20000,
+      winnerCount: 3,
+      currentWinners: 3,
+      totalWinners: 20,
+      members: 15,
+      totalMembers: 20,
+      balance: 5000,
     },
     {
       id: 5,
@@ -44,8 +68,21 @@ export default function Pools() {
       title: 'OASIS',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       target: 20000,
+      winnerCount: 3,
+      currentWinners: 3,
+      totalWinners: 20,
+      members: 15,
+      totalMembers: 20,
+      balance: 5000,
     },
   ];
+
+  const toggleFlip = (id: number) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
@@ -61,6 +98,7 @@ export default function Pools() {
               className="h-7 sm:h-9 md:h-10 w-auto"
             />
           </div>
+
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
             <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900">
               1.05ETH
@@ -73,11 +111,10 @@ export default function Pools() {
         </div>
       </header>
 
-    
       <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-5 sm:py-8 md:py-10 lg:py-12">
         {/* Page Header */}
         <div className="mb-5 sm:mb-6 md:mb-8">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-1 text-[#252B36]">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-[#252B36] mb-1">
             Bloom
           </h1>
           <p className="text-xs sm:text-sm md:text-base text-gray-700">
@@ -150,39 +187,92 @@ export default function Pools() {
           {pools.map((pool) => (
             <div
               key={pool.id}
-              className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer w-full"
+              className="w-full h-[500px] sm:h-[520px] perspective-1000"
+              onClick={() => toggleFlip(pool.id)}
             >
-              <div className="relative h-48 sm:h-52 w-full">
-                <Image
-                  src={pool.image}
-                  alt={pool.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <div className="p-4 sm:p-5 w-full">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 text-[#252B36]">
-                  {pool.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3 sm:mb-4 text-justify text-[#7D7C7C]">
-                  {pool.description}
-                </p>
-
-                <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-200 w-full">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs sm:text-sm text-gray-600">Target:</span>
-                    <span className="text-sm sm:text-base font-bold text-gray-900">
-                      {pool.target.toLocaleString()}
-                    </span>
+              <div
+                className={`relative w-full h-full transition-transform duration-700 transform-style-3d cursor-pointer ${flippedCards[pool.id] ? 'rotate-y-180' : ''
+                  }`}
+              >
+                {/* Front Side */}
+                <div className="absolute inset-0 backface-hidden bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="relative h-48 sm:h-52 w-full">
+                    <Image
+                      src={pool.image}
+                      alt={pool.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                  <Image
-                    src='/triangleImage.png'
-                    alt="Triangle"
-                    width={12}
-                    height={12}
-                    className="w-2.5 h-2.5 sm:w-3 sm:h-3"
-                  />
+
+                  <div className="p-4 sm:p-5 w-full">
+                    <h3 className="text-lg sm:text-xl font-bold text-[#252B36] mb-2 sm:mb-3">
+                      {pool.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#7D7C7C] leading-relaxed mb-3 sm:mb-4 text-justify">
+                      {pool.description}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-200 w-full">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs sm:text-sm text-gray-600">Target:</span>
+                        <span className="text-sm sm:text-base font-bold text-gray-900">
+                          {pool.target.toLocaleString()}
+                        </span>
+                      </div>
+                      <Image
+                        src='/triangleImage.png'
+                        alt="Triangle"
+                        width={12}
+                        height={12}
+                        className="w-2.5 h-2.5 sm:w-3 sm:h-3"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Back Side */}
+                <div className="absolute inset-0 backface-hidden rotate-y-180 bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 p-6 sm:p-8 flex flex-col justify-center items-center text-center">
+                  <div className="mb-6">
+                    <p className="text-[#7D7C7C] text-sm mb-2">Winner count: {pool.winnerCount}</p>
+                    <p className="text-[#252B36] text-3xl font-light">
+                      {pool.currentWinners}/{pool.totalWinners}
+                    </p>
+                  </div>
+                  <div className="mb-6">
+                    <p className="text-[#7D7C7C] text-sm mb-1">
+                      Members: {pool.members} / {pool.totalMembers}
+                    </p>
+                  </div>
+                  <h3 className="text-[#252B36] text-xl font-bold mb-4">
+                    {pool.title}
+                  </h3>
+                  <p className="text-[#7D7C7C] text-xs leading-relaxed mb-6 max-w-xs">
+                    {pool.description}
+                  </p>
+                  <div className="w-full space-y-3 border-t border-gray-700 pt-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm">Target:</span>
+                      <span className="text-black text-sm font-bold">
+                        {pool.target.toLocaleString()} USDC
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm">Balance:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-black text-sm font-bold">
+                          {pool.balance.toLocaleString()} USDC
+                        </span>
+                        <Image
+                          src='/triangleImage.png'
+                          alt="Triangle"
+                          width={10}
+                          height={10}
+                          className="w-2 h-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -219,6 +309,22 @@ export default function Pools() {
           </button>
         </div>
       </main>
+
+      <style jsx global>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        .transform-style-3d {
+          transform-style: preserve-3d;
+        }
+        .backface-hidden {
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+      `}</style>
     </div>
   );
 }
