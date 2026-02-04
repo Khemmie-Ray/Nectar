@@ -5,6 +5,7 @@ import "./interface/IYieldAdapter.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract MockYieldAdapter is IYieldAdapter {
+
     IERC20 public token;
     uint256 public totalDeposited;
 
@@ -26,4 +27,5 @@ contract MockYieldAdapter is IYieldAdapter {
         totalDeposited = 0;
         return total;
     }
+
 }

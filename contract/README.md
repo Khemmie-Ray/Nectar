@@ -109,6 +109,10 @@ forge test
 - **OpenZeppelin**: Utilizes industry-standard libraries for access control and token handling.
 - **Principal Integrity**: The protocol is designed to ensure that the initial deposit amount is always available for withdrawal once the period ends.
 
+## Contracts
+- **Factory**: 0xE3b1AFA2e09AC4bFA417e118B43f0737C8803940
+- **AaveUsdcAdapter**: 0x5F67925f67bb556a64e082D2eb88fc5D7De313CD
+
 <!-- ## 📄 License
 
 MIT -->

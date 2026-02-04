@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 interface ISavingsFactory {
+
     struct SingleYieldInfo {
         string name;
         address yieldAdapter;
@@ -31,4 +32,5 @@ interface ISavingsFactory {
     function createGroupSingleYieldAdapter(SingleYieldInfo memory yieldInfo) external returns (address);
     function getAllGroups() external view returns (GroupInfo[] memory);
     function getGroup(uint256 id) external view returns (GroupInfo memory);
+
 }

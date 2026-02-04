@@ -5,14 +5,19 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interface/IYieldAdapter.sol";
 
 interface IAavePool {
+
     function supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external;
 
     function withdraw(address asset, uint256 amount, address to) external returns (uint256);
+
 }
 
 contract AaveYieldAdapter is IYieldAdapter {
+
     IERC20 public immutable asset;
     IAavePool public immutable pool;
+
+    string adapterName = "AaveUsdcAdapter";
 
     constructor(address _asset, address _pool) {
         asset = IERC20(_asset);
@@ -28,4 +33,5 @@ contract AaveYieldAdapter is IYieldAdapter {
     function withdrawAll(uint256 totalAmount) external returns (uint256) {
         return pool.withdraw(address(asset), totalAmount, address(this));
     }
+
 }

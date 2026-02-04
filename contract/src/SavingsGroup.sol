@@ -6,9 +6,10 @@ import "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.s
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interface/IYieldAdapter.sol";
-import {ISavingsFactory} from "./interface/ISavingsFactory.sol";
+import { ISavingsFactory } from "./interface/ISavingsFactory.sol";
 
 contract SavingsGroup is VRFConsumerBaseV2 {
+
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
@@ -49,7 +50,7 @@ contract SavingsGroup is VRFConsumerBaseV2 {
     uint64 public subscriptionId;
     address vrfCoordinator = 0x5C210eF41CD1a72de73bF76eC39637bB0d3d7BEE;
     bytes32 keyHash = 0x9e1344a1247c8a1785d0a4681a27152bffdb43666ae5bf7d14d24a5efd44bf71;
-    uint32 public callbackGasLimit = 2500000;
+    uint32 public callbackGasLimit = 2_500_000;
     uint16 public constant CONFIRMATIONS = 3;
 
     uint256 public pendingProfit;
@@ -277,11 +278,13 @@ contract SavingsGroup is VRFConsumerBaseV2 {
         emit YieldDistributed(winners, rewardPerWinner);
     }
 
-    // in a scenrio when all the users anre not eligible or the num isnt up to winners we shoudl withdraw all profit to protocol
+    // in a scenrio when all the users anre not eligible or the num isnt up to winners we shoudl withdraw all profit to
+    // protocol
     function withdrawUnusedProfit() external {
         require(!yieldDistributed, "Yield distributed");
         require(pendingProfit > 0, "No profit");
         token.transfer(PROTOCOL, pendingProfit);
         pendingProfit = 0;
     }
+
 }
