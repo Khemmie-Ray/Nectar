@@ -81,7 +81,7 @@ export default function PoolDetails() {
                             Explore Pools
                         </h1>
                         <p className="text-xs sm:text-sm text-[#7D7C7C]">
-                            See who's saving together.
+                            See who &apos;s saving together.
                         </p>
                     </div>
 
@@ -274,10 +274,10 @@ export default function PoolDetails() {
                             <thead className="bg-white border-b border-gray-200">
                                 <tr>
                                     <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#252B36]">
-                                        User's Address
+                                        User &apos;s Address
                                     </th>
                                     <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#252B36]">
-                                        Fund's Target($)
+                                        Fund &apos;s Target($)
                                     </th>
                                     <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#252B36]">
                                         Amount Paid
