@@ -4,12 +4,20 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { AppKitButton, useAppKitNetwork } from '@reown/appkit/react';
+import { useAppKit } from '@reown/appkit/react';
+import { useAppKitAccount } from '@reown/appkit/react';
+import { div } from 'framer-motion/client';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { chainId } = useAppKitNetwork()
+  const { open } = useAppKit()
+  const { isConnected } = useAppKitAccount()
+  console.log(chainId)
 
   return (
-    <>
+    <div className='bg-white py-2'>
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -30,7 +38,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8 lg:gap-12">
+          {!isConnected && (<nav className="hidden md:flex items-center gap-8 lg:gap-12">
             <a
               href="#about"
               className="text-sm lg:text-base font-medium text-[#252B36] hover:text-[#FFC000] transition-colors duration-300"
@@ -43,16 +51,17 @@ export default function Header() {
             >
               How it works
             </a>
-          </nav>
+          </nav>)}
 
           {/* Desktop Connect Wallet Button */}
-          <motion.button
+          {!isConnected ? (<motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="hidden md:block bg-[#252B36] text-white px-6 lg:px-8 py-2.5 lg:py-3 rounded-lg font-medium text-sm lg:text-base hover:bg-[#2D3441] transition-colors duration-300"
+            onClick={() => open()}
           >
             Connect Wallet
-          </motion.button>
+          </motion.button>) : <div className='lg:block md:block hidden'><AppKitButton /></div>}
 
           {/* Mobile Menu Button */}
           <button
@@ -75,7 +84,7 @@ export default function Header() {
             transition={{ duration: 0.3 }}
             className="md:hidden fixed top-[72px] left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-40"
           >
-            <nav className="px-4 py-6 space-y-4">
+            {!isConnected && (<nav className="px-4 py-6 space-y-4">
               <a
                 href="#about"
                 onClick={() => setMobileMenuOpen(false)}
@@ -90,16 +99,19 @@ export default function Header() {
               >
                 How it works
               </a>
-              <button
+            
+            </nav>)}
+            <div className='px-4 '>
+             {!isConnected ? ( <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full bg-[#252B36] text-white px-6 py-3 rounded-lg font-medium text-base hover:bg-[#2D3441] transition-colors duration-300"
               >
                 Connect Wallet
-              </button>
-            </nav>
+              </button>) : <div className='lg:hidden md:hidden block'><AppKitButton /></div>}
+              </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
