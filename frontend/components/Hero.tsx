@@ -11,12 +11,11 @@ export default function Hero() {
     { size: { mobile: 20, desktop: 64 }, top: '8%', right: '20%', delay: 0.2, mobileHide: false },
     { size: { mobile: 12, desktop: 16 }, top: '25%', right: '18%', delay: 0.4, mobileHide: true },
     { size: { mobile: 14, desktop: 32 }, top: '35%', right: '25%', delay: 0.3, mobileHide: true },
-   
   ];
 
   return (
-    <section className="w-full px-4 sm:px-6 md:px-8 lg:px-16 mt-2 sm:mt-4 py-4">
-      <div>
+    <section className="w-full bg-white">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-16 pt-2 sm:pt-4 pb-8 sm:pb-12">
         <div className="bg-[#252B36] rounded-2xl sm:rounded-3xl border-2 border-[#4A9FD8]/50 px-6 py-12 sm:px-8 sm:py-14 md:px-12 md:py-16 lg:px-20 lg:py-20 relative overflow-hidden">
           {/* Animated Stars */}
           {stars.map((star, index) => (
@@ -33,7 +32,7 @@ export default function Hero() {
               style={{
                 top: star.top,
                 left: star.left,
-                right:star.right,
+                right: star.right,
               }}
             >
               <Sparkles

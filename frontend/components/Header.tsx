@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { AppKitButton, useAppKitNetwork } from '@reown/appkit/react';
 import { useAppKit } from '@reown/appkit/react';
 import { useAppKitAccount } from '@reown/appkit/react';
-import { div } from 'framer-motion/client';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

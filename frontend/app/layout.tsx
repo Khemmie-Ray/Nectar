@@ -5,9 +5,12 @@ import "./globals.css";
 import ContextProvider from "@/context";
 import Header from "@/components/Header";
 
+
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -16,20 +19,22 @@ export const metadata: Metadata = {
     "Nectar helps communities save together and earn yield safely. The yield is shared based on rules you set while everyone's savings remain protected.",
 };
 
-const headersObj = await headers();
-const cookies = headersObj.get("cookie");
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersObj = await headers();
+  const cookies = headersObj.get("cookie");
+
   return (
     <html lang="en">
-      <body className={`${manrope.variable}  antialiased`}>
+      <body className={`${manrope.variable} antialiased bg-white min-h-screen`}>
         <ContextProvider cookies={cookies}>
           <Header />
-          {children}
+          <main className="bg-white">
+            {children}
+          </main>
         </ContextProvider>
       </body>
     </html>
