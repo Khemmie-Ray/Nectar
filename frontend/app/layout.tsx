@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import "./globals.css";
 import ContextProvider from "@/context";
 import Header from "@/components/Header";
+import { WalletRouter } from "@/components/pools/WalletRouter";
 
 
 const manrope = Manrope({
@@ -32,7 +33,8 @@ export default async function RootLayout({
       <body className={`${manrope.variable} antialiased bg-white min-h-screen`}>
         <ContextProvider cookies={cookies}>
           <Header />
-          <main className="bg-white">
+          <main className="bg-white min-h-screen">  
+            <WalletRouter />         
             {children}
           </main>
         </ContextProvider>

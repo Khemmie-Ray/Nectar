@@ -1,21 +1,31 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { Search, Plus } from 'lucide-react';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Image from "next/image";
+import { Search, Plus } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 export default function Pools() {
   const router = useRouter();
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [flippedCards, setFlippedCards] = useState<{ [key: number]: boolean }>(
+    {},
+  );
+  const { isConnected } = useAppKitAccount();
+
+  if (!isConnected) {
+    return null;
+  }
 
   const pools = [
     {
       id: 1,
-      image: '/flowerOne.png',
-      title: 'OASIS',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      image: "/flowerOne.png",
+      title: "OASIS",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       target: 20000,
       winnerCount: 3,
       currentWinners: 3,
@@ -26,9 +36,10 @@ export default function Pools() {
     },
     {
       id: 2,
-      image: '/flowerTwo.png',
-      title: 'OASIS',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      image: "/flowerTwo.png",
+      title: "OASIS",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       target: 20000,
       winnerCount: 3,
       currentWinners: 3,
@@ -39,9 +50,10 @@ export default function Pools() {
     },
     {
       id: 3,
-      image: '/flowerThree.png',
-      title: 'OASIS',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      image: "/flowerThree.png",
+      title: "OASIS",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       target: 20000,
       winnerCount: 3,
       currentWinners: 3,
@@ -52,9 +64,10 @@ export default function Pools() {
     },
     {
       id: 4,
-      image: '/flowerFour.png',
-      title: 'OASIS',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      image: "/flowerFour.png",
+      title: "OASIS",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       target: 20000,
       winnerCount: 3,
       currentWinners: 3,
@@ -65,9 +78,10 @@ export default function Pools() {
     },
     {
       id: 5,
-      image: '/flowerFive.png',
-      title: 'OASIS',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      image: "/flowerFive.png",
+      title: "OASIS",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       target: 20000,
       winnerCount: 3,
       currentWinners: 3,
@@ -83,8 +97,8 @@ export default function Pools() {
   };
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
-      <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-5 sm:py-8 md:py-10 lg:py-12">
+    <div className="min-h-screen bg-white">
+      <main className="w-[90%] mx-auto py-5 sm:py-8 md:py-10 lg:py-12">
         {/* Page Header */}
         <div className="mb-5 sm:mb-6 md:mb-8">
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-[#252B36] mb-1">
@@ -110,20 +124,22 @@ export default function Pools() {
             {/* Filter Buttons */}
             <div className="flex gap-2 w-full sm:w-auto">
               <button
-                onClick={() => setActiveFilter('all')}
-                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${activeFilter === 'all'
-                  ? 'bg-[#252B36] text-white'
-                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
+                onClick={() => setActiveFilter("all")}
+                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                  activeFilter === "all"
+                    ? "bg-[#252B36] text-white"
+                    : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
               >
                 All
               </button>
               <button
-                onClick={() => setActiveFilter('mine')}
-                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${activeFilter === 'mine'
-                  ? 'bg-[#252B36] text-white'
-                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
+                onClick={() => setActiveFilter("mine")}
+                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
+                  activeFilter === "mine"
+                    ? "bg-[#252B36] text-white"
+                    : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
               >
                 Pools by Me
               </button>
@@ -139,7 +155,7 @@ export default function Pools() {
             />
             <button className="p-2 sm:p-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0">
               <Image
-                src='/stash.png'
+                src="/stash.png"
                 alt="Stash"
                 width={16}
                 height={16}
@@ -195,7 +211,7 @@ export default function Pools() {
                           Details
                         </span>
                         <Image
-                          src='/triangleImage.png'
+                          src="/triangleImage.png"
                           alt="Triangle"
                           width={12}
                           height={12}
@@ -239,7 +255,7 @@ export default function Pools() {
                           {pool.balance.toLocaleString()} USDC
                         </span>
                         <Image
-                          src='/triangleImage.png'
+                          src="/triangleImage.png"
                           alt="Triangle"
                           width={10}
                           height={10}
@@ -278,10 +294,11 @@ export default function Pools() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg text-xs sm:text-sm font-medium transition-colors ${currentPage === page
-                ? 'bg-[#FFC000] text-[#252B36]'
-                : 'bg-[#252B36] text-white hover:bg-gray-800'
-                }`}
+              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                currentPage === page
+                  ? "bg-[#FFC000] text-[#252B36]"
+                  : "bg-[#252B36] text-white hover:bg-gray-800"
+              }`}
             >
               {page}
             </button>

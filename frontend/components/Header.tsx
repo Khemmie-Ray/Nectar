@@ -10,10 +10,8 @@ import { useAppKitAccount } from '@reown/appkit/react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { chainId } = useAppKitNetwork()
   const { open } = useAppKit()
   const { isConnected } = useAppKitAccount()
-  console.log(chainId)
 
   return (
     <div className='bg-white py-2'>
@@ -21,7 +19,7 @@ export default function Header() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full py-4 sm:py-6 px-4 sm:px-6 md:px-8 lg:px-16 relative z-50"
+        className="w-[90%] mx-auto py-4 sm:py-6 relative z-50 border-b border-[#C4C1C1]"
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           {/* Logo */}
