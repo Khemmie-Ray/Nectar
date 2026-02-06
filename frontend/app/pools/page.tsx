@@ -9,7 +9,6 @@ export default function Pools() {
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [flippedCards, setFlippedCards] = useState<{ [key: number]: boolean }>({});
 
   const pools = [
     {
@@ -79,48 +78,12 @@ export default function Pools() {
     },
   ];
 
-  const toggleFlip = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
-    setFlippedCards(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
-
   const handleCardClick = (poolId: number) => {
-    // Only navigate if card is not flipped
-    if (!flippedCards[poolId]) {
-      router.push(`/pools/${poolId}`);
-    }
+    router.push(`/pools/${poolId}`);
   };
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      {/* Header */}
-      <header className="border-b border-gray-200 w-full">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-3 sm:py-4 md:py-5 flex items-center justify-between">
-          <div className="flex items-center flex-shrink-0 min-w-0">
-            <Image
-              src="/logo.png"
-              alt="Nectar"
-              width={140}
-              height={40}
-              className="h-7 sm:h-9 md:h-10 w-auto"
-            />
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
-            <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900">
-              1.05ETH
-            </span>
-            <div className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex-shrink-0" />
-            <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900 hidden sm:block">
-              0x0457......CZ
-            </span>
-          </div>
-        </div>
-      </header>
-
       <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-5 sm:py-8 md:py-10 lg:py-12">
         {/* Page Header */}
         <div className="mb-5 sm:mb-6 md:mb-8">
@@ -197,16 +160,13 @@ export default function Pools() {
           {pools.map((pool) => (
             <div
               key={pool.id}
-              className="w-full h-[500px] sm:h-[520px] perspective-1000"
+              className="flip-card w-full h-[420px] sm:h-[450px]"
+              onClick={() => handleCardClick(pool.id)}
             >
-              <div
-                className={`relative w-full h-full transition-transform duration-700 transform-style-3d cursor-pointer ${flippedCards[pool.id] ? 'rotate-y-180' : ''
-                  }`}
-                onClick={() => handleCardClick(pool.id)}
-              >
+              <div className="flip-card-inner">
                 {/* Front Side */}
-                <div className="absolute inset-0 backface-hidden bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="relative h-48 sm:h-52 w-full">
+                <div className="flip-card-front">
+                  <div className="relative h-40 sm:h-44 w-full">
                     <Image
                       src={pool.image}
                       alt={pool.title}
@@ -216,27 +176,24 @@ export default function Pools() {
                   </div>
 
                   <div className="p-4 sm:p-5 w-full">
-                    <h3 className="text-lg sm:text-xl font-bold text-[#252B36] mb-2 sm:mb-3">
+                    <h3 className="font-bold text-[18px] text-[#252B36] mb-2 sm:mb-3">
                       {pool.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-[#7D7C7C] leading-relaxed mb-3 sm:mb-4 text-justify">
+                    <p className="text-[#7D7C7C] text-[13px] mb-3 sm:mb-4 text-justify">
                       {pool.description}
                     </p>
 
                     <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-200 w-full">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs sm:text-sm text-gray-600">Target:</span>
-                        <span className="text-sm sm:text-base font-bold text-gray-900">
+                        <span className="text-gray-600 text-[12px]">Target:</span>
+                        <span className="font-bold text-gray-900 text-[14px]">
                           {pool.target.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button
-                          onClick={(e) => toggleFlip(e, pool.id)}
-                          className="text-[10px] sm:text-xs text-blue-600 hover:text-blue-800 underline"
-                        >
+                        <span className="text-[#FFC000] text-[11px]">
                           Details
-                        </button>
+                        </span>
                         <Image
                           src='/triangleImage.png'
                           alt="Triangle"
@@ -250,35 +207,35 @@ export default function Pools() {
                 </div>
 
                 {/* Back Side */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 p-6 sm:p-8 flex flex-col justify-center items-center text-center">
+                <div className="flip-card-back">
                   <div className="mb-6">
-                    <p className="text-[#7D7C7C] text-sm mb-2">Winner count: {pool.winnerCount}</p>
-                    <p className="text-[#252B36] text-3xl font-light">
+                    <p className="text-[#7D7C7C] mb-2 text-[13px]">Winner count: {pool.winnerCount}</p>
+                    <p className="text-[#252B36] font-light text-[20px]">
                       {pool.currentWinners}/{pool.totalWinners}
                     </p>
                   </div>
                   <div className="mb-6">
-                    <p className="text-[#7D7C7C] text-sm mb-1">
+                    <p className="text-[#7D7C7C] text-[13px]">
                       Members: {pool.members} / {pool.totalMembers}
                     </p>
                   </div>
-                  <h3 className="text-[#252B36] text-xl font-bold mb-4">
+                  <h3 className="text-[#252B36] text-[18px] font-bold mb-4">
                     {pool.title}
                   </h3>
-                  <p className="text-[#7D7C7C] text-xs leading-relaxed mb-6 max-w-xs">
+                  <p className="text-[#7D7C7C] text-[12px] mb-6 max-w-xs">
                     {pool.description}
                   </p>
                   <div className="w-full space-y-3 border-t border-gray-700 pt-6">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-400 text-sm">Target:</span>
-                      <span className="text-black text-sm font-bold">
+                      <span className="text-gray-400 text-[13px]">Target:</span>
+                      <span className="text-black font-bold text-[13px]">
                         {pool.target.toLocaleString()} USDC
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-400 text-sm">Balance:</span>
+                      <span className="text-gray-400 text-[13px]">Balance:</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-black text-sm font-bold">
+                        <span className="text-black font-bold text-[13px]">
                           {pool.balance.toLocaleString()} USDC
                         </span>
                         <Image
@@ -298,7 +255,7 @@ export default function Pools() {
                       e.stopPropagation();
                       router.push(`/pools/${pool.id}`);
                     }}
-                    className="mt-4 px-4 py-2 bg-[#FFC000] text-[#252B36] rounded-lg text-xs font-bold hover:bg-[#FFD14D] transition-colors"
+                    className="mt-4 px-4 py-2 bg-[#FFC000] text-[12px] text-[#252B36] rounded-lg font-bold hover:bg-[#FFD14D] transition-colors"
                   >
                     View Full Details
                   </button>
@@ -340,18 +297,69 @@ export default function Pools() {
       </main>
 
       <style jsx global>{`
-        .perspective-1000 {
+        /* Flip Card Container */
+        .flip-card {
           perspective: 1000px;
+          cursor: pointer;
         }
-        .transform-style-3d {
+
+        .flip-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transition: transform 0.6s;
           transform-style: preserve-3d;
         }
-        .backface-hidden {
+
+        /* Hover effect - flip on hover */
+        .flip-card:hover .flip-card-inner {
+          transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
+          border-radius: 16px;
+          overflow: hidden;
         }
-        .rotate-y-180 {
+
+        .flip-card-front {
+          background-color: white;
+          border: 1px solid #e5e7eb;
+        }
+
+        .flip-card-back {
+          background-color: white;
+          border: 1px solid #374151;
           transform: rotateY(180deg);
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 640px) {
+          .flip-card-back {
+            padding: 32px;
+          }
+        }
+
+        /* Mobile - disable flip on hover, only on click */
+        @media (max-width: 639px) {
+          .flip-card:hover .flip-card-inner {
+            transform: none;
+          }
+          
+          .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+          }
         }
       `}</style>
     </div>

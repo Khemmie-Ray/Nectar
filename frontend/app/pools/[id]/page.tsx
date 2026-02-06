@@ -48,30 +48,7 @@ export default function PoolDetails() {
 
     return (
         <div className="min-h-screen bg-white overflow-x-hidden">
-            {/* Header */}
-            <header className="border-b border-gray-200 w-full">
-                <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-3 sm:py-4 md:py-5 flex items-center justify-between">
-                    <div className="flex items-center flex-shrink-0 min-w-0">
-                        <Image
-                            src="/logo.png"
-                            alt="Nectar"
-                            width={140}
-                            height={40}
-                            className="h-7 sm:h-9 md:h-10 w-auto"
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
-                        <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900">
-                            1.05ETH
-                        </span>
-                        <div className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex-shrink-0" />
-                        <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900 hidden sm:block">
-                            0x0457......CZ
-                        </span>
-                    </div>
-                </div>
-            </header>
+           
 
             {/* Main Content */}
             <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-5 sm:py-8 md:py-10 lg:py-12">
