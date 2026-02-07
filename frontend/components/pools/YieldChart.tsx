@@ -33,11 +33,9 @@ export default function YieldChart({
     const elapsed = Math.min(now - startTime, duration);
     const progress = elapsed / duration;
 
-    // Convert to numbers for charting
     const deposited = Number(totalDeposited) / Math.pow(10, decimals);
     const profit = Number(pendingProfit) / Math.pow(10, decimals);
 
-    // Create data points
     const points = [];
     const numPoints = 10;
 
@@ -46,16 +44,13 @@ export default function YieldChart({
       const timestamp = startTime + (duration * ratio);
       const date = new Date(timestamp * 1000);
       
-      // Calculate accumulated yield based on time elapsed
       let accumulatedYield = 0;
       let currentDeposit = 0;
 
       if (ratio <= progress) {
-        // Past/current data
         accumulatedYield = profit * ratio / progress;
         currentDeposit = deposited * ratio / progress;
       } else {
-        // Projected future data
         const projectedYield = profit / progress; // Total expected yield
         accumulatedYield = projectedYield * ratio;
         currentDeposit = deposited;
