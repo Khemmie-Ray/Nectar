@@ -3,10 +3,13 @@
 import Image from 'next/image';
 import { Clock } from 'lucide-react';
 import { useState } from 'react';
+import { useGetAllGroups } from '@/hooks/useGetAllGroup';
 
 export default function PoolDetails() {
     const [currentPage, setCurrentPage] = useState(1);
     const [depositAmount, setDepositAmount] = useState('');
+    const { groups } = useGetAllGroups()
+    console.log(groups)
 
     const members = [
         {
