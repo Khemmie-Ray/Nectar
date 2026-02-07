@@ -1,8 +1,8 @@
-import { BeatLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 const LoadingSpinner = () => (
   <div className='text-center grid place-content-center'>
-     <BeatLoader color="#154A80" size={15} />
+     <ClipLoader color="#252B36" size={35} />
   </div>
 );
 

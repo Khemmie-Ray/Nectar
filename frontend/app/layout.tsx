@@ -5,6 +5,7 @@ import "./globals.css";
 import ContextProvider from "@/context";
 import Header from "@/components/Header";
 import { WalletRouter } from "@/components/pools/WalletRouter";
+import { Toaster } from "sonner";
 
 
 const manrope = Manrope({
@@ -34,6 +35,7 @@ export default async function RootLayout({
         <ContextProvider cookies={cookies}>
           <Header />
           <main className="bg-white min-h-screen">  
+            <Toaster />
             <WalletRouter />         
             {children}
           </main>

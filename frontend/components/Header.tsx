@@ -54,7 +54,7 @@ export default function Header() {
           {!isConnected ? (<motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="hidden md:block bg-[#252B36] text-white px-6 lg:px-8 py-2.5 lg:py-3 rounded-lg font-medium text-sm lg:text-base hover:bg-[#2D3441] transition-colors duration-300"
+            className="hidden md:block bg-[#FFC000]  text-[#252B36]  px-6 lg:px-8 py-2.5 lg:py-3 rounded-lg font-medium text-sm lg:text-base hover:bg-[#2D3441] hover:text-white transition-colors duration-300"
             onClick={() => open()}
           >
             Connect Wallet
@@ -101,7 +101,7 @@ export default function Header() {
             <div className='px-4 '>
              {!isConnected ? ( <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full bg-[#252B36] text-white px-6 py-3 rounded-lg font-medium text-base hover:bg-[#2D3441] transition-colors duration-300"
+                className="w-full bg-[#FFC000]  text-[#252B36] px-6 py-3 rounded-lg font-medium text-base hover:bg-[#2D3441] transition-colors duration-300 hover:text-white "
               >
                 Connect Wallet
               </button>) : <div className='lg:hidden md:hidden block'><AppKitButton /></div>}

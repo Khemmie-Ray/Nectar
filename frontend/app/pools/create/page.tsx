@@ -1,25 +1,64 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import usePinataUpload from "@/hooks/usePinataUpload";
 import { ImagePlus } from "lucide-react";
 import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import tokenList from "@/constant/tokenList.json";
-import { useCreateGroup } from "@/hooks/useCreateGroup";
+import { useCreateGroup, SavingsGroupFormData } from "@/hooks/useCreateGroup";
+import { toast } from "sonner";
 
 const Create = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState("");
   const { uploadToPinata, isUploading } = usePinataUpload();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    minDeposit: "",
+    maxDeposit: "",
+    duration: "",
+    startTime: "",
+    winnersCount: "",
+    minMembers: "",
+    maxMembers: "",
+    totalDepositGoal: "",
+    totalexpectedDepositPerUser: "",
+  });
+
   const [selectedToken, setSelectedToken] = useState("");
   const [selectedYieldAdapterAddress, setSelectedYieldAdapterAddress] =
     useState("");
-  // const startDate = Math.floor(Date.now() / 1000) + 100;
 
   const token = Object.values(tokenList);
   const currentToken = selectedToken
     ? tokenList[selectedToken as keyof typeof tokenList]
     : null;
+
+  const { createGroup, isConfirming, isSuccess, isWriting } = useCreateGroup();
+
+ 
+  useEffect(() => {
+    if (isSuccess) {
+      setFormData({
+        name: "",
+        description: "",
+        minDeposit: "",
+        maxDeposit: "",
+        duration: "",
+        startTime: "",
+        winnersCount: "",
+        minMembers: "",
+        maxMembers: "",
+        totalDepositGoal: "",
+        totalexpectedDepositPerUser: "",
+      });
+      setSelectedToken("");
+      setSelectedYieldAdapterAddress("");
+      setImageUrl("");
+    }
+  }, [isSuccess]);
 
   const convertIpfsUrl = (url: any) =>
     url.startsWith("ipfs://")
@@ -44,6 +83,60 @@ const Create = () => {
     }
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.name.trim()) {
+      toast.error("Please enter a group name");
+      return;
+    }
+    if (!imageUrl) {
+      toast.error("Please upload an image");
+      return;
+    }
+    if (!selectedToken) {
+      toast.error("Please select a token");
+      return;
+    }
+    if (!selectedYieldAdapterAddress) {
+      toast.error("Please select a yield adapter");
+      return;
+    }
+    if (!formData.minDeposit || !formData.maxDeposit) {
+      toast.error("Please enter min and max deposit amounts");
+      return;
+    }
+    if (!formData.startTime) {
+      toast.error("Please select a start time");
+      return;
+    }
+
+    const groupData: SavingsGroupFormData = {
+      name: formData.name,
+      yieldAdapter: selectedYieldAdapterAddress as `0x${string}`,
+      token: selectedToken as `0x${string}`,
+      startTime: new Date(formData.startTime),
+      duration: Number(formData.duration),
+      winnersCount: Number(formData.winnersCount),
+      minDeposit: formData.minDeposit,
+      maxDeposit: formData.maxDeposit,
+      minMembers: Number(formData.minMembers),
+      maxMembers: Number(formData.maxMembers),
+      totalexpectedDepositPerUser: formData.totalexpectedDepositPerUser,
+      totalDepositGoal: formData.totalDepositGoal,
+      imageUri: imageUrl,
+      additionalInfo: formData.description,
+    };
+
+    createGroup(groupData, currentToken?.decimals || 6);
+  };
+
+   const isLoading = isWriting || isConfirming;
+
   return (
     <main className="">
       <div className="mb-5 sm:mb-6 md:mb-8">
@@ -54,10 +147,13 @@ const Create = () => {
           Everything here grows. Find your place.
         </p>
       </div>
-      <form action="" className="w-full lg:w-[80%] md:w-[80%]  mx-auto my-8">
-        <div className="w-full my-8 ">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full lg:w-[80%] md:w-[80%] mx-auto my-8"
+      >
+        <div className="w-full my-8">
           <div className="flex justify-between lg:flex-row md:flex-row flex-col">
-             <div className="w-full lg:w-[25%] md:w-[25%]">
+            <div className="w-full lg:w-[25%] md:w-[25%]">
               <label>Select an Image (Image URL (Below 1mb))</label>
               <div className="mb-4 w-full">
                 {isUploading ? (
@@ -124,12 +220,15 @@ const Create = () => {
                 )}
               </div>
             </div>
+
             <div className="flex justify-between w-full lg:w-[66%] md:w-[66%] flex-wrap lg:flex-row md:flex-row flex-col">
               <div className="mb-4 w-full lg:w-[48%] md:w-[48%]">
                 <label className="text-[14px] font-medium">Group name:</label>
                 <input
                   type="text"
                   placeholder="Enter a name"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
                   className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
                 />
               </div>
@@ -138,50 +237,71 @@ const Create = () => {
                 <input
                   type="text"
                   placeholder="Description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
                   className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
                 />
               </div>
               <div className="mb-4 w-full lg:w-[48%] md:w-[48%]">
                 <label className="text-[14px] font-medium">Min amount:</label>
                 <input
-                  type="text"
-                  placeholder="Enter a min amount"
+                  type="number"
+                  step="0.01"
+                  placeholder="Enter a min amount users can pay"
+                  value={formData.minDeposit}
+                  onChange={(e) =>
+                    handleInputChange("minDeposit", e.target.value)
+                  }
                   className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
                 />
               </div>
               <div className="mb-4 w-full lg:w-[48%] md:w-[48%]">
                 <label className="text-[14px] font-medium">Max amount:</label>
                 <input
-                  type="text"
-                  placeholder="Enter a max amount"
+                  type="number"
+                  step="0.01"
+                  placeholder="Enter a max amount users can pay"
+                  value={formData.maxDeposit}
+                  onChange={(e) =>
+                    handleInputChange("maxDeposit", e.target.value)
+                  }
                   className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
                 />
               </div>
             </div>
           </div>
+
           <div className="flex justify-between w-full flex-wrap lg:flex-row md:flex-row flex-col">
             <div className="mb-4 w-full lg:w-[32%] md:w-[32%]">
-              <label className="text-[14px] font-medium">Duration</label>
+              <label className="text-[14px] font-medium">Duration (days)</label>
               <input
-                type="text"
-                placeholder="Duration"
+                type="number"
+                placeholder="Duration in days"
+                value={formData.duration}
+                onChange={(e) => handleInputChange("duration", e.target.value)}
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
               />
             </div>
             <div className="mb-4 w-full lg:w-[32%] md:w-[32%]">
               <label className="text-[14px] font-[500]">Start Time</label>
               <input
-                type="date"
-                // value={startTime}
-                // onChange={(e) => setStartTime(e.target.value)}
+                type="datetime-local"
+                value={formData.startTime}
+                onChange={(e) => handleInputChange("startTime", e.target.value)}
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
               />
             </div>
             <div className="mb-4 w-full lg:w-[32%] md:w-[32%]">
               <label className="text-[14px] font-medium">Winners count:</label>
               <input
-                type="text"
+                type="number"
                 placeholder="Enter winners count"
+                value={formData.winnersCount}
+                onChange={(e) =>
+                  handleInputChange("winnersCount", e.target.value)
+                }
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
               />
             </div>
@@ -189,7 +309,12 @@ const Create = () => {
               <label className="text-[14px] font-medium">Token:</label>
               <select
                 value={selectedToken}
-                onChange={(e) => setSelectedToken(e.target.value)}
+                onChange={(e) => {
+                  setSelectedToken(e.target.value);
+                  const token =
+                    tokenList[e.target.value as keyof typeof tokenList];
+                  if (token) setSelectedYieldAdapterAddress(token.yieldadapter);
+                }}
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg bg-transparent"
               >
                 <option value="">Select a token</option>
@@ -200,7 +325,6 @@ const Create = () => {
                 ))}
               </select>
             </div>
-
             <div className="mb-4 w-full lg:w-[32%] md:w-[32%]">
               <label className="text-[14px] font-medium">Yield Adapter:</label>
               <select
@@ -219,16 +343,24 @@ const Create = () => {
             <div className="mb-4 w-full lg:w-[32%] md:w-[32%]">
               <label className="text-[14px] font-medium">Min Member:</label>
               <input
-                type="text"
+                type="number"
                 placeholder="Enter min for members"
+                value={formData.minMembers}
+                onChange={(e) =>
+                  handleInputChange("minMembers", e.target.value)
+                }
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
               />
             </div>
             <div className="mb-4 w-full lg:w-[32%] md:w-[32%]">
               <label className="text-[14px] font-medium">Max Member:</label>
               <input
-                type="text"
+                type="number"
                 placeholder="Enter max for members"
+                value={formData.maxMembers}
+                onChange={(e) =>
+                  handleInputChange("maxMembers", e.target.value)
+                }
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
               />
             </div>
@@ -237,8 +369,13 @@ const Create = () => {
                 Target Deposit Goal:
               </label>
               <input
-                type="text"
+                type="number"
+                step="0.01"
                 placeholder="Enter target amount"
+                value={formData.totalDepositGoal}
+                onChange={(e) =>
+                  handleInputChange("totalDepositGoal", e.target.value)
+                }
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
               />
             </div>
@@ -247,15 +384,28 @@ const Create = () => {
                 Amount per user:
               </label>
               <input
-                type="text"
+                type="number"
+                step="0.01"
                 placeholder="Enter an amount for users"
+                value={formData.totalexpectedDepositPerUser}
+                onChange={(e) =>
+                  handleInputChange(
+                    "totalexpectedDepositPerUser",
+                    e.target.value,
+                  )
+                }
                 className="p-3 border border-[#252B36]/30 block w-full text-xs rounded-lg"
               />
             </div>
           </div>
+
           <div className="w-full lg:w-[40%] md:w-[40%] mx-auto lg:mt-8 md:mt-6 mt-4">
-            <button className="bg-[#FFC000]  text-[#252B36]  px-6 lg:px-8 py-2.5 lg:py-3 rounded-lg font-medium text-sm lg:text-base hover:bg-[#2D3441] hover:text-white transition-colors duration-300 w-full">
-              {/* {!loading ? "Create" : <LoadingSpinner />} */} Create
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-[#FFC000] text-[#252B36] px-6 lg:px-8 py-2.5 lg:py-3 rounded-lg font-medium text-sm lg:text-base hover:bg-[#2D3441] hover:text-white transition-colors duration-300 w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? <LoadingSpinner /> : "Create"}
             </button>
           </div>
         </div>

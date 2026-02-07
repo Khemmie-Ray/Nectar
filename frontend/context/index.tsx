@@ -16,9 +16,9 @@ if (!projectId) {
 
 // Set up metadata
 const metadata = {
-  name: 'appkit-example',
-  description: 'AppKit Example',
-  url: 'https://appkitexampleapp.com', // origin must match your domain & subdomain
+  name: 'Nectar',
+  description: "Nectar helps communities save together and earn yield safely. The yield is shared based on rules you set while everyone&apos;s savings remain protected.",
+  url: 'https://localhos:3000', 
   icons: ['https://avatars.githubusercontent.com/u/179229932']
 }
 
