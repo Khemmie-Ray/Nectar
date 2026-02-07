@@ -84,7 +84,7 @@ export default function PoolDetails() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      <main className="w-full py-5 sm:py-8 md:py-10 lg:py-12">
+      <main className="w-full">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#252B36] mb-1">
@@ -103,7 +103,7 @@ export default function PoolDetails() {
             )}
             {isActive && (
               <button className="px-4 sm:px-6 py-2 sm:py-2.5 bg-[#FFC000] text-[#252B36] rounded-lg text-xs sm:text-sm font-bold hover:bg-[#FFD14D] transition-colors">
-                Join
+                Swap Tokens
               </button>
             )}
           </div>

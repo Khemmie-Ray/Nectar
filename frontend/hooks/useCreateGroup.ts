@@ -53,7 +53,7 @@ export function useCreateGroup() {
 
   const createGroup = async (
     formData: SavingsGroupFormData,
-    tokenDecimals: number = 6, // Default to 6 for USDC on Arc
+    tokenDecimals: number = 6, 
   ) => {
     try {
       const startTimestamp = Math.floor(formData.startTime.getTime() / 1000);
