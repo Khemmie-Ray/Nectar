@@ -12,6 +12,7 @@ import { decodeAdditionalInfo } from "@/utils/helper";
 import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import YieldChart from "@/components/pools/YieldChart";
 import DepositForm from "@/components/pools/DepositForm";
+import { BridgeModal } from '@/components/BridgeModal';
 
 export default function PoolDetails() {
   const params = useParams();
@@ -19,6 +20,7 @@ export default function PoolDetails() {
   const { address } = useAppKitAccount();
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [showBridgeModal, setShowBridgeModal] = useState(false);
   const userAddress = address as `0x${string}` | undefined;
 
   const { groupDetails, isLoading, error, refetch } = useGetGroupDetails(
@@ -102,7 +104,9 @@ export default function PoolDetails() {
               </button>
             )}
             {isActive && (
-              <button className="px-4 sm:px-6 py-2 sm:py-2.5 bg-[#FFC000] text-[#252B36] rounded-lg text-xs sm:text-sm font-bold hover:bg-[#FFD14D] transition-colors">
+              <button 
+              onClick={() => setShowBridgeModal(true)}
+              className="px-4 sm:px-6 py-2 sm:py-2.5 bg-[#FFC000] text-[#252B36] rounded-lg text-xs sm:text-sm font-bold hover:bg-[#FFD14D] transition-colors">
                 Swap Tokens
               </button>
             )}
